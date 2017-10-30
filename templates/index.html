@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Leaflet Test</title>
+
+<!-- custom stylesheet stored in static/css !-->
+<link rel="stylesheet" type="text/css" href="../static/css/style.css"
+media="screen"/>
+
+<!-- jquery !-->
+<script type="text/javascript"
+     src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+</script>
+
+<!-- leaflet css source !-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+   crossorigin=""/>
+<!-- Javascript source !-->
+ <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+   integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+   crossorigin=""></script>
+
+</head>
+
+<body>
+<div id="mapid"></div>
+<script>
+
+$(document).ready(function(){
+
+	$.getJSON("/_interest_points", function(data){
+	console.log(data);
+	});
+});
+
+
+
+
+
+var mymap = L.map('mapid').setView([48.86, 2.35], 12);
+
+//change this later 
+var accessToken = "pk.eyJ1IjoiYW5vbnNraWRkIiwiYSI6ImNqOTdqdnd3NzA3YnAzMmxzODhhbjN4MXQifQ.ZJBcLATCntKTRRl2GCyxyw";
+
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox.streets',
+    accessToken: accessToken
+}).addTo(mymap);
+
+
+//feature group for interest points !-->
+var InterestPoints = L.featureGroup().addTo(mymap).on("click", Interestclick);
+var marker;
+for (var i =0 ; i < 15 ; i++ )
+{
+	marker = L.marker(getRandomLatLng()).addTo(InterestPoints).bindPopup("test" + i)
+}
+
+function Interestclick(event) {
+  console.log("Clicked on marker ");
+}
+
+function getRandomLatLng() {
+	lat = 48.86 + 0.1 * Math.random() - 0.05;
+	lon = 2.35 + 0.1 * Math.random() - 0.05;
+	console.log(lat + " " + lon);
+  return [
+    48.86 + 0.1 * Math.random() - 0.05,
+    2.35 + 0.1 * Math.random() - 0.05
+  ];
+}
+
+
+
+
+
+
+
+
+
+
+  
+</script>
+
+
+</body> </html>
