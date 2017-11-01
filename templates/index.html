@@ -11,36 +11,46 @@ media="screen"/>
      src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
 </script>
 
-<!-- leaflet css source !-->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
-   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
-   crossorigin=""/>
-<!-- Javascript source !-->
- <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
-   integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
-   crossorigin=""></script>
+<!-- Load Leaflet from CDN-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet-src.js"></script>
+
+<!-- Load Esri Leaflet from CDN -->
+<script src="https://unpkg.com/esri-leaflet@2.1.1"></script>
+
+<!-- Esri Leaflet Geocoder -->
+<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css">
+<script src="https://unpkg.com/esri-leaflet-geocoder@2.2.6"></script>
 
 </head>
 
 <body>
+
 <div id="mapid"></div>
+
+
+
 <script>
+var mymap = L.map('mapid').setView([44.0521, -123.0868], 14);
 
-$(document).ready(function(){
+    var tiles = L.esri.basemapLayer("Streets").addTo(mymap);
 
-	$.getJSON("/_interest_points", function(data){
-	console.log(data);
-	});
-});
+    // create the geocoding control and add it to the map
+    var searchControl = L.esri.Geocoding.geosearch().addTo(mymap);
 
+    // create an empty layer group to store the results and add it to the map
+    var results = L.layerGroup().addTo(mymap);
 
+    // listen for the results event and add every result to the map
+    searchControl.on("results", function(data) {
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+            results.addLayer(L.marker(data.results[i].latlng));
+        }
+    });
 
-
-
-var mymap = L.map('mapid').setView([48.86, 2.35], 12);
-
-//change this later 
-var accessToken = "pk.eyJ1IjoiYW5vbnNraWRkIiwiYSI6ImNqOTdqdnd3NzA3YnAzMmxzODhhbjN4MXQifQ.ZJBcLATCntKTRRl2GCyxyw";
+//parse api as safe, as it needs to be a string and needs the double quotes
+var accessToken = {{api|safe}} 
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -49,37 +59,54 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: accessToken
 }).addTo(mymap);
 
-
 //feature group for interest points !-->
 var InterestPoints = L.featureGroup().addTo(mymap).on("click", Interestclick);
-var marker;
-for (var i =0 ; i < 15 ; i++ )
-{
-	marker = L.marker(getRandomLatLng()).addTo(InterestPoints).bindPopup("test" + i)
-}
+
+$(document).ready(function(){
+		//request json information from flask 
+       $.getJSON("/_interest_points", function(data){
+       //console.log(data);
+       var marker; 
+       //take json data and create marker and set to a group to populate the map
+       for (var i = 0 ; i < data.length; i++){
+        var lat = data[i].lat; 
+        var lng = data[i].lng;
+        var name = data[i].name; 
+
+        var markerLocation = new L.LatLng(lat,lng);
+        marker = new L.Marker(markerLocation).addTo(InterestPoints).bindPopup("Hello I am " + name);
+    }
+
+       });
+});
+
+
+//marker click 
 
 function Interestclick(event) {
   console.log("Clicked on marker ");
 }
+//init to null to remove on another user click 
+var marker = null;
+//map click to create a thing
+mymap.on('click', function(e) {
 
-function getRandomLatLng() {
-	lat = 48.86 + 0.1 * Math.random() - 0.05;
-	lon = 2.35 + 0.1 * Math.random() - 0.05;
-	console.log(lat + " " + lon);
-  return [
-    48.86 + 0.1 * Math.random() - 0.05,
-    2.35 + 0.1 * Math.random() - 0.05
-  ];
-}
+	var popLocation = e.latlng;
+	var address; 
+	 
+	L.esri.Geocoding.reverseGeocode().latlng(popLocation).run(function(error,result){
+		address = result.address.LongLabel;
+		var popup = L.popup().setLatLng(popLocation).setContent(address);
+		if(marker != null){
+			mymap.removeLayer(marker);
+		}
+		marker = new L.Marker(popLocation).addTo(InterestPoints).bindPopup(popup).openPopup();
+	})
+
+	
 
 
-
-
-
-
-
-
-
+});
 
   
 </script>

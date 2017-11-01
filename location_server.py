@@ -12,7 +12,8 @@ import lat_lon_parser
 app = flask.Flask(__name__)
 CONFIG = config.configuration()
 app.secret_key = CONFIG.SECRET_KEY
-
+leaflet_key = CONFIG.ACCESS_TOKEN
+locations = CONFIG.LOCATIONS
 ###
 # Pages
 ###
@@ -21,8 +22,8 @@ app.secret_key = CONFIG.SECRET_KEY
 @app.route("/")
 @app.route("/index")
 def index():
-    return flask.render_template('index.html')
-
+    return flask.render_template('index.html', api = leaflet_key )
+    #send leaflet key to index
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -45,7 +46,7 @@ def _display_locations():
     app.logger.debug("Got a JSON request")
     #change to load from config
     app.logger.debug("Processing the location")
-    location_data = lat_lon_parser.process("./interestpoints/interestpoints.txt")
+    location_data = lat_lon_parser.process(locations)
     return json.dumps(location_data)
 
 
