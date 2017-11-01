@@ -14,6 +14,7 @@ CONFIG = config.configuration()
 app.secret_key = CONFIG.SECRET_KEY
 leaflet_key = CONFIG.ACCESS_TOKEN
 locations = CONFIG.LOCATIONS
+
 ###
 # Pages
 ###
@@ -41,7 +42,8 @@ def page_not_found(error):
 @app.route("/_interest_points")
 def _display_locations():
     """
-    a descriptiob here
+    AJAX Endpoint to send json address information 
+    to the client 
     """
     app.logger.debug("Got a JSON request")
     #change to load from config
