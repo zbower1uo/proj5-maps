@@ -20,7 +20,7 @@ echo "Activating ${activate}"
 source ${activate}
 echo "Activated"
 
-pushd brevets
+#pushd brevets
 python3 location_server.py -P ${PORTNUM} &
 pid=$! 
 popd
