@@ -34,7 +34,27 @@ media="screen"/>
 
 var mymap = L.map('mapid').setView([44.0521, -123.0868], 14);
 
-    //settng up address earch
+var pizzaIcon = L.icon({
+    iconUrl: '../static/images/pizza.png',
+    shadowUrl: '../static/images/marker-shadow.png',
+
+    iconSize:     [50, 95], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [0, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [15, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+
+
+
+
+
+
+
+
+
+    //settng up address search
     // create the geocoding control and add it to the map
     var searchControl = L.esri.Geocoding.geosearch().addTo(mymap);
 
@@ -75,7 +95,7 @@ $(document).ready(function(){
         var web = data[i].web;
 
         var markerLocation = new L.LatLng(lat,lng);
-        marker = new L.Marker(markerLocation).addTo(InterestPoints).bindPopup(name + "<br>" + web);
+        marker = new L.Marker(markerLocation, {icon: pizzaIcon}).addTo(InterestPoints).bindPopup(name + "<br>" + web);
     }
 
        });
