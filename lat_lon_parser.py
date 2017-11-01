@@ -1,3 +1,8 @@
+import config
+
+CONFIG = config.configuration()
+locations = CONFIG.LOCATIONS
+
 def process(raw): 
     locations = [] 
     file = open(raw)
@@ -7,13 +12,13 @@ def process(raw):
         if len(line) == 0 or line[0] == '#':
             continue
         parts = line.split(',')
-        locations.append({"name": str(parts[0]), "lat": float(parts[1]) ,"lng": float(parts[2])})
+        locations.append({"name": str(parts[0]), "lat": float(parts[1]) ,"lng": float(parts[2]), "web":str(parts[3])})
 
     file.close()
     return locations
 
 def main():
-    f = "./interestpoints/interestpoints.txt"
+    f = locations
     parsed = process(f)
     print(parsed)
 

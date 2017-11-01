@@ -1,14 +1,14 @@
 #location data
 #TOADD css class , website , image
-#format location name , latitude , longitude , 
+#format location name , latitude , longitude , website
 
-Sizzle Pie,44.0497576,-123.09307619999998
-Whirled Pies,44.0512729,-123.09554660000003
-Pizza Pipeline,44.0507538,-123.0953935
-Track Town Pizza,44.0461581,-123.06650100000002
-Pappas Pizza,44.07909310000001,-123.0677078
-Al Tagilo,44.04569009999999,-123.09309380000002
-Roaring Rapids,44.0458937,-123.03451339999998
-La Perla,44.0453181,-123.08941419999996
-Pizza Research Institute,44.0562318,-123.10969499999999
-CountrySide Pizza,44.0718623,-123.11811019999999
+Sizzle Pie,44.0497576,-123.09307619999998,https://www.test.com
+Whirled Pies,44.0512729,-123.09554660000003,https://www.test.com
+Pizza Pipeline,44.0507538,-123.0953935,https://www.test.com
+Track Town Pizza,44.0461581,-123.06650100000002,https://www.test.com
+Pappas Pizza,44.07909310000001,-123.0677078,https://www.test.com
+Al Tagilo,44.04569009999999,-123.09309380000002,https://www.test.com
+Roaring Rapids,44.0458937,-123.03451339999998,https://www.test.com
+La Perla,44.0453181,-123.08941419999996,https://www.test.com
+Pizza Research Institute,44.0562318,-123.10969499999999,https://www.test.com
+CountrySide Pizza,44.0718623,-123.11811019999999,https://www.test.com
