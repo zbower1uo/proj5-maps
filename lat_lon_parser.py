@@ -11,7 +11,7 @@ def process(raw):
         print(line)
         if len(line) == 0 or line[0] == '#':
             continue
-        parts = line.split(',')
+        parts = line.split(',')#split on , and parse the 'parts' as given values
         locations.append({"name": str(parts[0]), "lat": float(parts[1]) ,"lng": float(parts[2]), "web":str(parts[3])})
 
     file.close()

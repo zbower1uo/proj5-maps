@@ -34,8 +34,7 @@ media="screen"/>
 
 var mymap = L.map('mapid').setView([44.0521, -123.0868], 14);
 
-    var tiles = L.esri.basemapLayer("Streets").addTo(mymap);
-
+    //settng up address earch
     // create the geocoding control and add it to the map
     var searchControl = L.esri.Geocoding.geosearch().addTo(mymap);
 
@@ -62,18 +61,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 //feature group for interest points !-->
 var InterestPoints = L.featureGroup().addTo(mymap).on("click", Interestclick);
-
-//custom icon /////
-
-var pizza = L.icon({
-    iconUrl: 'pizza.png',
-    shadowUrl: 'marker-shadow.png',
-    iconSize:     [38, 95], // size of the icon
-    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-});
 
 $(document).ready(function(){
 		//request json information from flask 
@@ -109,10 +96,11 @@ mymap.on('click', function(e) {
 	var address; 
 	 
 	L.esri.Geocoding.reverseGeocode().latlng(popLocation).run(function(error,result){
-		address = result.address.LongLabel;
+		address = result.address.LongLabel; //result.address is an array with short just city and full addr
 		var popup = L.popup().setLatLng(popLocation).setContent(address);
 		if(marker != null){
 			mymap.removeLayer(marker);
+			//remove marker if one already exitss
 		}
 		marker = new L.Marker(popLocation).addTo(InterestPoints).bindPopup(popup).openPopup();
 	})
